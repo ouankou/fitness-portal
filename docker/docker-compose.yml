@@ -1,0 +1,26 @@
+version: '3.2'
+
+services:
+  db:
+    image: mysql:5.7
+    ports:
+      - '3306:3306'
+    environment:
+      MYSQL_DATABASE: 'ssdi_fitness_portal'
+#      MYSQL_USER: 'root'
+#      MYSQL_PASSWORD: '1234'
+      MYSQL_ROOT_PASSWORD: '1234'
+    container_name: service.mysql
+  app:
+    build:
+      context: .
+      dockerfile: app.Dockerfile
+    ports:
+      - '8000:8000'
+    volumes:
+      - type: bind
+        source: ../
+        target: /fitness-portal
+    container_name: service.fitness_portal
+    depends_on:
+      - db

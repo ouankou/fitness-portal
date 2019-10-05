@@ -77,9 +77,9 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'ssdi_fitness_portal',
-        'USER': 'admin',
+        'USER': 'root',
         'PASSWORD': '1234',
-        'HOST': 'localhost',
+        'HOST': 'service.mysql',
         'PORT': '3306'
     }
 }
