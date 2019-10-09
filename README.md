@@ -18,3 +18,7 @@ docker-compose run app python3 fitness-portal/manage.py migrate
 ```bash
 docker-compose run db mysql -h service.mysql -uroot -p1234
 ```
+
+- To access the application
+
+Go to the link `localhost:8000` in the browser.
