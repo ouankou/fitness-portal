@@ -17,10 +17,13 @@ services:
       dockerfile: app.Dockerfile
     ports:
       - '8000:8000'
+      - '4444:4444'
     volumes:
       - type: bind
         source: ../
         target: /fitness-portal
+    stdin_open: true
+    tty: true
     container_name: service.fitness_portal
     depends_on:
       - db

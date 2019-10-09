@@ -1,0 +1,73 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>
+        {% block title %}{% endblock %} |
+        Fitness Portal |
+    </title>
+
+    <link href="https://fonts.googleapis.com/css?family=PT+Sans+Narrow&display=swap" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="{% static "lib/bootstrap-4.3.1/css/bootstrap.css" %}">
+    <link rel="stylesheet" type="text/css" href="{% static "css/index.css" %}">
+    {% block css %}{% endblock %}
+
+</head>
+<body>
+    <div class="cover-container d-flex w-100 h-100 p-3 mx-auto flex-column">
+        {% include "navbar.html" %}
+
+        {% block container %}
+        {% endblock %}
+
+        <footer class="mastfoot mt-auto text-center">
+            <div class="inner">
+                <p>fitness-portal-ITCS-8112 - Fall 2019</p>
+            </div>
+        </footer>
+    </div>
+
+    <script type="text/javascript" src="{% static "lib/jquery-3.4.1.min.js" %}"></script>
+    <script type="text/javascript" src="{% static "lib/bootstrap-4.3.1/js/popper.min.js" %}"></script>
+    <script type="text/javascript" src="{% static "lib/bootstrap-4.3.1/js/bootstrap.js" %}"></script>
+    <script>
+        $(document).ready(function () {
+            $("#login-dropdown").click(function (e) {
+                $("#login-dp").toggle('slow');
+            });
+
+            $("#sign-in").click(function (e) {
+                e.preventDefault();
+                let data = {};
+                $("#login-nav").serializeArray().forEach(function (item) {
+                    data[item.name] = item.value;
+                });
+                $.ajax({
+                    url: "login/",
+                    type: "post",
+                    dataType: "json",
+                    headers: { "X-CSRFToken": data["csrfmiddlewaretoken"] },
+                    data: JSON.stringify({
+                        username: data.username,
+                        password: data.password
+                    }),
+                    success: function (data) {
+                        if (data.is_authenticated) {
+                            location.reload();
+                        }
+                        else
+                            alert("Incorrect username/password!");
+
+                    },
+                    error: function (data) {
+                        console.log(data);
+                    }
+                });
+            });
+        });
+    </script>
+    {% block js %}
+    {% endblock %}
+</body>
+</html>

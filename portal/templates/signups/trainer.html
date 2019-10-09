@@ -1,0 +1,97 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}
+    Trainer Application
+{% endblock %}
+{% block container %}
+    <div class="jumbotron">
+        <h1 class="display-4">Trainer Application Form</h1>
+        <p class="lead">
+            Please fill up and submit this form to apply for trainer position in the portal.
+            Administration office will verify this information and get back to you within 3-5 business days.
+        </p>
+{#        <hr class="my-4">#}
+{#        <p>Administration office will verify this information and get back to you within 3-5 business days.</p>#}
+{#        <a class="btn btn-primary btn-lg" href="#" role="button">Learn more</a>#}
+    </div>
+    <div>
+        <form>
+            <div class="container">
+                <div class="row">
+                    <div class="col">
+                        <div class="form-group">
+                            <label for="first_name">First Name</label>
+                            <input type="text" class="form-control" id="first_name" name="first_name">
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="form-group">
+                            <label for="last_name">Last Name</label>
+                            <input type="text" class="form-control" id="last_name" name="last_name">
+                        </div>
+                    </div>
+                </div>
+                                <div class="row">
+                    <div class="col">
+                        <div class="form-group">
+                            <label for="username">Username</label>
+                            <input type="text" class="form-control" id="username" name="username">
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="form-group">
+                            <label for="exampleInputPassword1">Password</label>
+                            <input type="password" class="form-control" id="exampleInputPassword1"
+                                   placeholder="Password">
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <div class="form-group">
+                            <label for="exampleInputEmail1">Email address</label>
+                            <input type="email" class="form-control" id="exampleInputEmail1"
+                                   aria-describedby="emailHelp"
+                                   placeholder="Enter email">
+{#                            <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone#}
+{#                                else.#}
+{#                            </small>#}
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="form-group">
+                            <label for="years_of_experience">Years of Experience</label>
+                            <input type="number" class="form-control" id="years_of_experience"
+                                   name="years_of_experience">
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="form-group">
+                            <label for="charge">Charge/Month</label>
+                            <input type="number" step="0.01" class="form-control" id="charge" name="charge">
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <div class="form-group">
+                            <label for="location_served">Location Served</label>
+                            <textarea class="form-control" id="location_served" name="location_served"></textarea>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="form-group">
+                            <label for="certifications">Certifications</label>
+                            <textarea class="form-control" id="certifications" name="certifications"></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <button style="float: right" type="submit" class="btn btn-primary">Submit</button>
+                </div>
+            </div>
+        </form>
+    </div>
+{% endblock %}
