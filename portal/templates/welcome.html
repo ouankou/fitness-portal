@@ -6,6 +6,11 @@
 Welcome
 {% endblock %}
 {% block container %}
+    {% if message %}
+        <div class="alert alert-info" role="alert">
+            {{ message }}
+        </div>
+    {% endif %}
     <main role="main" class="inner cover">
         <h1 class="cover-heading">Start today!</h1>
         <p class="lead">Sign up as a client or apply as a trainer..</p>

@@ -5,14 +5,14 @@ from django.contrib.auth.models import User
 
 
 class Trainer(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
     is_approved = models.BooleanField(default=False)
     applied_on = models.DateField(auto_now_add=True, blank=True)
     approved_on = models.DateField(auto_now_add=True, blank=True)
     years_of_previous_experience = models.IntegerField(default=0)
     locations_served = models.TextField(default="", blank=True)
     charge = models.DecimalField(max_digits=5, decimal_places=2)  # per week
-    certification = models.TextField(default="")
+    certification = models.TextField(default="", blank=True)
 
     @property
     def years_of_experience_in_portal(self):
@@ -33,7 +33,7 @@ class Client(models.Model):
         ('cmp', 'Competitive'),
         ('rec', 'Recreational')
     ]
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
     purpose = models.CharField(max_length=100, choices=CLIENT_PURPOSE_CHOICES)
     starting_weight = models.DecimalField(max_digits=5, decimal_places=2)
     target_weight = models.DecimalField(max_digits=5, decimal_places=2)

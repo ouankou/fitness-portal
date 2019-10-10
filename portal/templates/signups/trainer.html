@@ -10,12 +10,10 @@
             Please fill up and submit this form to apply for trainer position in the portal.
             Administration office will verify this information and get back to you within 3-5 business days.
         </p>
-{#        <hr class="my-4">#}
-{#        <p>Administration office will verify this information and get back to you within 3-5 business days.</p>#}
-{#        <a class="btn btn-primary btn-lg" href="#" role="button">Learn more</a>#}
     </div>
     <div>
-        <form>
+        <form role="form" method="post" action="/trainer_application/">
+            {% csrf_token %}
             <div class="container">
                 <div class="row">
                     <div class="col">
@@ -31,7 +29,7 @@
                         </div>
                     </div>
                 </div>
-                                <div class="row">
+                <div class="row">
                     <div class="col">
                         <div class="form-group">
                             <label for="username">Username</label>
@@ -41,7 +39,7 @@
                     <div class="col">
                         <div class="form-group">
                             <label for="exampleInputPassword1">Password</label>
-                            <input type="password" class="form-control" id="exampleInputPassword1"
+                            <input type="password" class="form-control" id="exampleInputPassword1" name="password"
                                    placeholder="Password">
                         </div>
                     </div>
@@ -51,7 +49,7 @@
                         <div class="form-group">
                             <label for="exampleInputEmail1">Email address</label>
                             <input type="email" class="form-control" id="exampleInputEmail1"
-                                   aria-describedby="emailHelp"
+                                   aria-describedby="emailHelp" name="email"
                                    placeholder="Enter email">
 {#                            <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone#}
 {#                                else.#}

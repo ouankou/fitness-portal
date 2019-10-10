@@ -8,6 +8,7 @@
         Fitness Portal |
     </title>
 
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons"rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=PT+Sans+Narrow&display=swap" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="{% static "lib_modules/bootstrap-4.3.1/css/bootstrap.css" %}">
     <link rel="stylesheet" type="text/css" href="{% static "css/index.css" %}">
@@ -44,7 +45,7 @@
                     data[item.name] = item.value;
                 });
                 $.ajax({
-                    url: "login/",
+                    url: window.location.origin+"/login/",
                     type: "post",
                     dataType: "json",
                     headers: { "X-CSRFToken": data["csrfmiddlewaretoken"] },
@@ -54,7 +55,7 @@
                     }),
                     success: function (data) {
                         if (data.is_authenticated) {
-                            location.reload();
+                            window.location.href=window.location.origin;
                         }
                         else
                             alert("Incorrect username/password!");

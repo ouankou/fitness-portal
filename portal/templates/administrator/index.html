@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}
+    {{ request.user.username }}
+{% endblock %}
+
+{% block container %}
+    <h1 class="display-4">Pending applications</h1>
+    <table class="table">
+        <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Name</th>
+            <th scope="col">Email</th>
+            <th scope="col">Experience (Years)</th>
+            <th scope="col">Certifications</th>
+            <th scope="col">Charge/Month</th>
+            <th scope="col">Application Submitted</th>
+            <th scope="col">Action</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for application in application_list %}
+            <tr>
+                <th scope="row">{{ forloop.counter }}</th>
+                <td>{{ application.user.first_name }} {{ application.user.last_name }}</td>
+                <td>{{ application.user.email }}</td>
+                <td>{{ application.years_of_previous_experience }}</td>
+                <td>{{ application.certification }}</td>
+                <td>{{ application.charge }}</td>
+                <td>{{ application.applied_on }}</td>
+                <td><a href="#"><i class="material-icons">check</i></a><a href="#"><i class="material-icons">close</i></a></td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}
