@@ -16,13 +16,21 @@ def index(request, **kwargs):
         elif request.user.is_staff:
             return render(request, "trainer/index.html")
         else:
-            return render(request, "client/index.html")
+            return render_client_index(request, **kwargs)
 
 
 def render_admin_index(request, **kwargs):
     pending_applications = Trainer.objects.filter(is_approved=False).all()
     context = {"application_list": pending_applications}
     return render(request, "administrator/index.html", context=context)
+
+
+def render_client_index(request, **kwargs):
+    username = request.user.username
+    client = Client.objects.filter(user__username=username).first()
+    print(client)
+    context = {"client": client}
+    return render(request, "client/index.html", context)
 
 
 def trainer_application(request, **kwargs):

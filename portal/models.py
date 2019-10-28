@@ -33,6 +33,10 @@ class Client(models.Model):
         ('cmp', 'Competitive'),
         ('rec', 'Recreational')
     ]
+    CLIENT_PURPOSE_CHOICE_MAP = {
+        'cmp': "Competitive",
+        'rec': "Recreational"
+    }
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     purpose = models.CharField(max_length=100, choices=CLIENT_PURPOSE_CHOICES)
     starting_weight = models.DecimalField(max_digits=5, decimal_places=2)
@@ -45,6 +49,13 @@ class Client(models.Model):
     arm_size = models.DecimalField(max_digits=5, decimal_places=2)
     chest_size = models.DecimalField(max_digits=5, decimal_places=2)
     leg_size = models.DecimalField(max_digits=5, decimal_places=2)
+
+    @property
+    def purpose_text(self):
+        return self.CLIENT_PURPOSE_CHOICE_MAP[self.purpose]
+
+    def __str__(self):
+        return self.user.first_name + " " + self.user.last_name
 
 
 class EmergencyContact(models.Model):
