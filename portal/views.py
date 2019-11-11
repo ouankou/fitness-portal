@@ -2,7 +2,6 @@ import json
 from django.http import HttpResponseBadRequest, JsonResponse
 from django.contrib.auth import logout as user_logout, authenticate, login as user_login
 from django.shortcuts import render, redirect
-
 from django.contrib.auth.models import User
 from .models import Trainer, Client
 
@@ -14,7 +13,7 @@ def index(request, **kwargs):
         if request.user.is_superuser:
             return render_admin_index(request, **kwargs)
         elif request.user.is_staff:
-            return render(request, "trainer/index.html")
+            return render_trainer_index(request, **kwargs)
         else:
             return render_client_index(request, **kwargs)
 
@@ -25,12 +24,22 @@ def render_admin_index(request, **kwargs):
     return render(request, "administrator/index.html", context=context)
 
 
-def render_client_index(request, **kwargs):
-    username = request.user.username
+def render_client_index(request, username=None, **kwargs):
+    username = username if username else request.user.username
     client = Client.objects.filter(user__username=username).first()
-    print(client)
-    context = {"client": client}
-    return render(request, "client/index.html", context)
+    if client is not None:
+        context = {"client": client}
+        return render(request, "client/index.html", context)
+    return HttpResponseBadRequest()
+
+
+def render_trainer_index(request, username=None, **kwargs):
+    username = username if username else request.user.username
+    trainer = Trainer.objects.filter(user__username=username).first()
+    if trainer is not None:
+        context = {"trainer": trainer}
+        return render(request, "trainer/index.html", context)
+    return HttpResponseBadRequest()
 
 
 def trainer_application(request, **kwargs):

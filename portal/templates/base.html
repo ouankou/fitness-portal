@@ -11,6 +11,7 @@
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons"rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=PT+Sans+Narrow&display=swap" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="{% static "lib_modules/bootstrap-4.3.1/css/bootstrap.css" %}">
+    <link rel="stylesheet" type="text/css" href="{% static "lib_modules/dataTables/jQuery.datatables.css" %}">
     <link rel="stylesheet" type="text/css" href="{% static "css/index.css" %}">
     {% block css %}{% endblock %}
 
@@ -30,9 +31,13 @@
     </div>
 
     <script type="text/javascript" src="{% static "lib_modules/jquery-3.4.1.min.js" %}"></script>
+    <script type="text/javascript" src="{% static "lib_modules/dataTables/jQuery.datatables.js" %}"></script>
+    <script type="text/javascript" src="{% static "lib_modules/dataTables/dataTables.select.min.js" %}"></script>
+    <script type="text/javascript" src="{% static "lib_modules/lodash.min.js" %}"></script>
     <script type="text/javascript" src="{% static "lib_modules/bootstrap-4.3.1/js/popper.min.js" %}"></script>
     <script type="text/javascript" src="{% static "lib_modules/bootstrap-4.3.1/js/bootstrap.js" %}"></script>
     <script>
+        window.fitnessPortal = {};
         $(document).ready(function () {
             $("#login-dropdown").click(function (e) {
                 $("#login-dp").toggle('slow');
@@ -66,9 +71,13 @@
                     }
                 });
             });
+            {% block jsOnLoad %}
+            {% endblock %}
         });
+
+        {% block js %}
+        {% endblock %}
+
     </script>
-    {% block js %}
-    {% endblock %}
 </body>
 </html>

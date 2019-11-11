@@ -6,32 +6,63 @@
 
 {% block container %}
     <h1 class="display-4">Pending applications</h1>
-    <table class="table">
-        <thead>
-        <tr>
-            <th scope="col">#</th>
-            <th scope="col">Name</th>
-            <th scope="col">Email</th>
-            <th scope="col">Experience (Years)</th>
-            <th scope="col">Certifications</th>
-            <th scope="col">Charge/Month</th>
-            <th scope="col">Application Submitted</th>
-            <th scope="col">Action</th>
-        </tr>
-        </thead>
-        <tbody>
-        {% for application in application_list %}
-            <tr>
-                <th scope="row">{{ forloop.counter }}</th>
-                <td>{{ application.user.first_name }} {{ application.user.last_name }}</td>
-                <td>{{ application.user.email }}</td>
-                <td>{{ application.years_of_previous_experience }}</td>
-                <td>{{ application.certification }}</td>
-                <td>{{ application.charge }}</td>
-                <td>{{ application.applied_on }}</td>
-                <td><a href="#"><i class="material-icons">check</i></a><a href="#"><i class="material-icons">close</i></a></td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+    <table class="table" id="pending-applications-table"></table>
+    <div class="row">
+        <div class="col-md-2">
+            <button id="accept-applications" style="float: left" type="submit" class="btn btn-primary">Accept</button>
+            <button id="reject-applications" style="margin-left: 5px;" type="submit" class="btn btn-danger">Reject</button>
+        </div>
+    </div>
 {% endblock %}
+
+<script>
+    {% block jsOnLoad %}
+        window.fitnessPortal.selectedApplications = [];
+        window.fitnessPortal.selectedRowNumbers = [];
+        $.get("/trainer/pending_applications/", function (response) {
+            if (response.status === "success" && response.data) {
+
+                $("#pending-applications-table").DataTable({
+                    data: response.data.data,
+                    columns: response.data.columns
+                });
+                $(".app-row").click(function (e) {
+                    let username = $(this).data("username");
+                    let rowId = $(this).data("row");
+                    let selectedApplications = window.fitnessPortal.selectedApplications;
+                    let selectedRowNumbers = window.fitnessPortal.selectedRowNumbers;
+
+                    if ($(this).is(':checked')) {
+                        selectedApplications.push(username);
+                        selectedRowNumbers.push(rowId);
+                    }
+                    else {
+                        _.remove(selectedApplications, function (v) { return v === username });
+                        _.remove(selectedRowNumbers, function (v) { return v === rowId });
+                    }
+
+                    window.fitnessPortal.selectedRowNumbers = selectedRowNumbers;
+                    window.fitnessPortal.selectedApplications = selectedApplications;
+                });
+            }
+        });
+    {% endblock %}
+</script>
+
+<script>
+{% block js %}
+    $("#accept-applications").click(function (e) {
+        e.preventDefault();
+        let selectedApplications = window.fitnessPortal.selectedApplications;
+        let url = "/trainer_application/accept/";
+        $.post(url, {applications: JSON.stringify(selectedApplications)}, function (data) {
+            console.log(data);
+        });
+        window.fitnessPortal.selectedApplications = [];
+
+        {# TODO:: remove from the table #}
+        let application_table = $("#pending-applications-table");
+        window.fitnessPortal.selectedRowNumbers = [];
+    });
+{% endblock %}
+</script>

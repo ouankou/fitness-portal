@@ -15,8 +15,13 @@ class Trainer(models.Model):
     certification = models.TextField(default="", blank=True)
 
     @property
+    def full_name(self):
+        return self.user.get_full_name()
+
+    @property
     def years_of_experience_in_portal(self):
-        return relativedelta(datetime.date.today() - self.approved_on).year
+        experience_in_years = relativedelta(datetime.date.today() - self.approved_on).year
+        return experience_in_years if experience_in_years else 0
 
     @property
     def years_of_overall_experience(self):

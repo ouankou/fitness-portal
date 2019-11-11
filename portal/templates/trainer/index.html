@@ -5,5 +5,119 @@
 {% endblock %}
 
 {% block container %}
-    <h1 class="display-3">Trainer Profile Page</h1>
+    <div class="container emp-profile">
+        <form method="post">
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="profile-img">
+                        <img src="{{ static }}/static/img/default-user-image.png"
+                             height="200" width="200"
+                             alt=""/>
+                    </div>
+                    <nav class="nav flex-column">
+                        <a class="nav-link active" href="#">Update Profile</a>
+                        <a class="nav-link" href="#">Add new service</a>
+                        <a class="nav-link" href="#">Client Reviews</a>
+                    </nav>
+                </div>
+                <div class="col-md-6">
+                    <div class="profile-head">
+                        <h5>
+                            {{ trainer.user.first_name }} {{ trainer.user.last_name }}
+                        </h5>
+                        <h6>
+                            Trainer Status
+                        </h6>
+                        <ul class="nav nav-tabs" id="myTab" role="tablist">
+                            <li class="nav-item">
+                                <a class="nav-link active" id="about-tab" data-toggle="tab" href="#about" role="tab"
+                                   aria-controls="about" aria-selected="true">About</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" id="program-tab" data-toggle="tab" href="#programs" role="tab"
+                                   aria-controls="programs" aria-selected="false">Programs</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" id="client-tab" data-toggle="tab" href="#clients" role="tab"
+                                   aria-controls="clients" aria-selected="false">Clients</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-md-2">
+{#                    <input type="submit" class="profile-edit-btn" name="btnAddMore" value="Edit Profile"/>#}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-4">
+                </div>
+                <div class="col-md-8">
+                    <div class="tab-content profile-tab" id="myTabContent">
+                        <div class="tab-pane fade show active" id="about" role="tabpanel" aria-labelledby="about-tab">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <label>Username</label>
+                                </div>
+                                <div class="col-md-6">
+                                    <p>{{ trainer.user.username }}</p>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <label>Email</label>
+                                </div>
+                                <div class="col-md-6">
+                                    <p>{{ trainer.user.email }}</p>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <label>Years of Experience</label>
+                                </div>
+                                <div class="col-md-6">
+                                    <p>{{ trainer.years_of_overall_experience }}</p>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <label>Applied on</label>
+                                </div>
+                                <div class="col-md-6">
+                                    <p>{{ trainer.applied_on }}</p>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <label>Certifications</label>
+                                </div>
+                                <div class="col-md-6">
+                                    <p>{{ trainer.certifications }}</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tab-pane fade" id="programs" role="tabpanel" aria-labelledby="program-tab">
+{#                            <div class="row">#}
+{#                                <div class="col-md-6">#}
+{#                                    <label>Leg Size</label>#}
+{#                                </div>#}
+{#                                <div class="col-md-6">#}
+{#                                    <p>{{ client.leg_size }} inch</p>#}
+{#                                </div>#}
+{#                            </div>#}
+                        </div>
+                        <div class="tab-pane fade" id="clients" role="tabpanel" aria-labelledby="client-tab">
+{#                            <div class="row">#}
+{#                                <div class="col-md-6">#}
+{#                                    <label>Leg Size</label>#}
+{#                                </div>#}
+{#                                <div class="col-md-6">#}
+{#                                    <p>{{ client.leg_size }} inch</p>#}
+{#                                </div>#}
+{#                            </div>#}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
 {% endblock %}

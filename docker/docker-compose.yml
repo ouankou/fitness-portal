@@ -7,8 +7,6 @@ services:
       - '3306:3306'
     environment:
       MYSQL_DATABASE: 'ssdi_fitness_portal'
-#      MYSQL_USER: 'root'
-#      MYSQL_PASSWORD: '1234'
       MYSQL_ROOT_PASSWORD: '1234'
     container_name: service.mysql
   app:
