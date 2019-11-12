@@ -5,13 +5,30 @@ from django.contrib.auth.models import User
 
 
 class Trainer(models.Model):
+    LOCATION_CHOICES_MAP = {
+        'cherokee': "Cherokee",
+        'mecklenburg': "Mecklenburg",
+        'camden': "Camden",
+        'moore': "Moore",
+        'union': "Union",
+        'cumberland': "Cumberland"
+    }
+
+    CERTIFICATION_CHOICE_MAP = {
+        'nasm': 'NASM (National Academy of sports medicine)',
+        'issa': 'ISSA (International Sports Sciences Association)',
+        'ace': 'ACE (American Council on Exercise)',
+        'acsm': 'ACSM (American College of Sports Medicine)',
+        'nsca': 'NSCA (National Strength and Conditioning Association)'
+    }
+
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     is_approved = models.BooleanField(default=False)
     applied_on = models.DateField(auto_now_add=True, blank=True)
     approved_on = models.DateField(auto_now_add=True, blank=True)
     years_of_previous_experience = models.IntegerField(default=0)
-    locations_served = models.TextField(default="", blank=True)
-    charge = models.DecimalField(max_digits=5, decimal_places=2)  # per week
+    locations_served = models.CharField(max_length=255, default="", blank=True)
+    charge = models.DecimalField(max_digits=5, decimal_places=2)
     certification = models.TextField(default="", blank=True)
 
     @property
@@ -26,6 +43,22 @@ class Trainer(models.Model):
     @property
     def years_of_overall_experience(self):
         return self.years_of_experience_in_portal + self.years_of_previous_experience
+
+    @property
+    def certification_list(self):
+        cert_key_list = self.certification.split(",")
+        cert_list = []
+        for cert_key in cert_key_list:
+            cert_list.append(self.CERTIFICATION_CHOICE_MAP[cert_key])
+        return cert_list
+
+    @property
+    def certification_str(self):
+        return ", ".join(self.certification_list)
+
+    @property
+    def location(self):
+        return self.LOCATION_CHOICES_MAP[self.locations_served]
 
     @property
     def average_rating(self):
@@ -78,37 +111,14 @@ class TrainerRating(models.Model):
     rated_on = models.DateTimeField(auto_now_add=True, blank=True)
 
 
-class Activities(models.Model):
-    ACTIVITY_CATEGORY_CHOICES = [
-        ('w', 'Weight'),
-        ('c', 'Cardio')
-    ]
-    name = models.CharField(max_length=255)
-    category = models.CharField(max_length=55, choices=ACTIVITY_CATEGORY_CHOICES)
-    reference_material = models.TextField(blank=True, null=True)
-    created_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
-    status = models.BooleanField(default=True)
-
-
-class Challenges(models.Model):
-    name = models.CharField(max_length=55)
-    created_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
-
-
-class ChallengedActivities(models.Model):
-    challenge = models.ForeignKey(Challenges, on_delete=models.CASCADE)
-    activity = models.ForeignKey(Activities, on_delete=models.CASCADE)
-    status = models.BooleanField(default=True)
-
-
-class AssignedChallengesToClient(models.Model):
-    ROUTINE_TYPE_CHOICES = [
-        ('d', "Daily"),
-        ('w', "Weekly"),
-        ('m', "Monthly"),
-    ]
-    client = models.ForeignKey(Client, on_delete=models.CASCADE)
-    assigned_by = models.ForeignKey(Trainer, on_delete=models.CASCADE)
-    routine_type = models.CharField(max_length=55, choices=ROUTINE_TYPE_CHOICES)
-    start_date = models.DateField(auto_now_add=True, blank=True)
-    end_date = models.DateField(auto_now_add=True, blank=True)
+class Program(models.Model):
+    trainer = models.ForeignKey(Trainer, on_delete=models.CASCADE)
+    name = models.CharField(max_length=100)
+    code = models.CharField(max_length=55, unique=True)
+    overview = models.TextField()
+    details = models.TextField()
+    material_1 = models.TextField()
+    material_2 = models.TextField(blank=True, null=True)
+    material_3 = models.TextField(blank=True, null=True)
+    created = models.DateField(auto_now_add=True, blank=True)
+    is_active = models.BooleanField(default=True, blank=True)

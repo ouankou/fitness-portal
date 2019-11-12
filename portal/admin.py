@@ -28,30 +28,14 @@ class TrainerRatingAdmin(admin.ModelAdmin):
     ]
 
 
-class ActivitiesAdmin(admin.ModelAdmin):
-    list_display = [
-        "name", "category", "reference_material", "created_by", "status"
-    ]
-
-
-class ChallengesAdmin(admin.ModelAdmin):
-    list_display = ["name", "created_by"]
-
-
-class ChallengedActivitiesAdmin(admin.ModelAdmin):
-    list_display = ["challenge", "activity", "status"]
-
-
-class AssignedChallengesToClientAdmin(admin.ModelAdmin):
-    list_display = ["client", "assigned_by", "routine_type", "start_date", "end_date"]
+class ProgramAdmin(admin.ModelAdmin):
+    list_display = ['trainer', 'name', 'code', 'overview', 'details', 'material_1', 'material_2', 'material_3',
+                    'created', 'is_active']
 
 
 admin.site.register(Trainer, TrainerAdmin)
 admin.site.register(Client, ClientAdmin)
 admin.site.register(EmergencyContact, EmergencyContactAdmin)
 admin.site.register(TrainerRating, TrainerRatingAdmin)
-admin.site.register(Activities, ActivitiesAdmin)
-admin.site.register(Challenges, ChallengesAdmin)
-admin.site.register(ChallengedActivities, ChallengedActivitiesAdmin)
-admin.site.register(AssignedChallengesToClient, AssignedChallengesToClientAdmin)
+admin.site.register(Program, ProgramAdmin)
 admin.site.site_header = "FITNESS PORTAL ADMIN"

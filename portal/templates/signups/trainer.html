@@ -38,8 +38,15 @@
                     </div>
                     <div class="col">
                         <div class="form-group">
-                            <label for="exampleInputPassword1">Password</label>
+                            <label for="password">Password</label>
                             <input type="password" class="form-control" id="password" name="password"
+                                   placeholder="Password">
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="form-group">
+                            <label for="password-confirmation">Confirm Password</label>
+                            <input type="password" class="form-control" id="password-confirmation" name="password"
                                    placeholder="Password">
                         </div>
                     </div>
@@ -69,18 +76,32 @@
                             <input type="number" step="0.01" class="form-control" id="charge" name="charge">
                         </div>
                     </div>
+                    <div class="col">
+                        <div class="form-group">
+                            <label for="location_served">Location Served</label>
+                            <select class="form-control" id="location_served" name="location_served">
+                                <option value=""></option>
+                                {% for key, location in location_options.items %}
+                                    <option value="{{ key }}">{{ location }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+
                 </div>
                 <div class="row">
                     <div class="col">
                         <div class="form-group">
-                            <label for="location_served">Location Served</label>
-                            <textarea class="form-control" id="location_served" name="location_served"></textarea>
-                        </div>
-                    </div>
-                    <div class="col">
-                        <div class="form-group">
                             <label for="certifications">Certifications</label>
-                            <textarea class="form-control" id="certifications" name="certifications"></textarea>
+                            <div class="row checkbox-group">
+                                {% for key, cert in certification_options.items %}
+                                    <div class="col">
+                                        <input type="checkbox" name="certifications_options" id="{{key}}"/>
+                                        <label for="cert_{{ forloop.counter }}">{{ cert }}</label>
+                                    </div>
+                                {% endfor %}
+                                <input type="hidden" value="" id="certifications" name="certifications">
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -93,25 +114,40 @@
         </form>
     </div>
 
-<script>
-function formCheck() {
-  var result = true;
-  var fields = $("div.form-group").find("select, textarea, input").serializeArray();
-  fields.splice(0, 2);
-  $.each(fields, function(i, field) {
-      document.getElementById(field.name).style.backgroundColor = "white";
-  });
-  $.each(fields, function(i, field) {
-      if (!field.value) {
-        alert(field.name + ' is required');
-        document.getElementById(field.name).style.backgroundColor = "red";
-        result = false;
-        return false;
-      }
-   });
-  console.log(fields);
-  return result;
-}
-</script>
-
 {% endblock %}
+
+<script>
+    {% block js %}
+        function formCheck() {
+            let password = $("#password").val();
+            let passwordConfirmation = $("#password-confirmation").val();
+            if (password !== passwordConfirmation) {
+                alert("Password didn't match");
+                return false;
+            }
+            let result = true;
+            let fields = $("div.form-group").find("select, textarea, input").serializeArray();
+            fields.splice(0, 2);
+
+            $.each(fields, function (i, field) {
+                if (!field.value && field.name !== "certifications_options" && field.name !== "certifications") {
+                    alert(field.name + ' is required');
+                    document.getElementById(field.id).style.backgroundColor = "red";
+                    result = false;
+                    return false;
+                }
+            });
+
+            let certifications = [];
+            let $certifications = $("#certifications");
+            $("input[name='certifications_options']").each(function (index, obj) {
+                let isChecked = obj.checked;
+                if (isChecked) {
+                    certifications.push(obj.id);
+                }
+            });
+            $certifications.val(certifications.join(","));
+            return result;
+        }
+    {% endblock %}
+</script>

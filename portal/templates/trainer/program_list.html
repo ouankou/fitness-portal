@@ -1,0 +1,20 @@
+<table class="table">
+    <thead>
+        <th>#</th>
+        <th>Name</th>
+        <th>Code</th>
+        <th>Overview</th>
+        <th>Subscription</th>
+    </thead>
+    <tbody>
+        {% for program in trainer.program_set.all %}
+            <tr>
+                <td>{{ forloop.counter }}</td>
+                <td>{{ program.name }}</td>
+                <td>{{ program.code }}</td>
+                <td>{{ program.overview }}</td>
+                <td>-</td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>

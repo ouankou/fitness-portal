@@ -1,9 +1,10 @@
+import json
 import datetime
 from ast import literal_eval
 from django.views.decorators.csrf import csrf_exempt
 from django.http import JsonResponse, HttpResponseBadRequest
 
-from .models import Trainer
+from .models import Trainer, Program
 
 SUCCESS_STATUS = "success"
 ERROR_STATUS = "error"
@@ -67,3 +68,25 @@ def trainer_application_decision(request, decision, **kwargs):
         )})
 
     return HttpResponseBadRequest({"status": "error", "message": "Bad Request"})
+
+
+def add_program(request, trainer_username, **kwargs):
+    if request.method == "POST":
+        data = json.loads(request.body)
+        trainer = Trainer.objects.filter(user__username=trainer_username).first()
+        program = Program.objects.create(
+            trainer=trainer,
+            name=data['name'],
+            code=data['code'],
+            overview=data['overview'],
+            details=data['details'],
+            material_1=data['material_1'],
+            material_2=data['material_2'],
+            material_3=data['material_3']
+        )
+        if program:
+            program.save()
+            message = {"message": "Program added successfully!"}
+            return JsonResponse(prepare_response_data(SUCCESS_STATUS, message))
+
+    return HttpResponseBadRequest()
