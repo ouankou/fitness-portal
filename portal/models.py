@@ -122,3 +122,10 @@ class Program(models.Model):
     material_3 = models.TextField(blank=True, null=True)
     created = models.DateField(auto_now_add=True, blank=True)
     is_active = models.BooleanField(default=True, blank=True)
+
+
+class ClientSubscribedProgram(models.Model):
+    client = models.ForeignKey(Client, on_delete=models.CASCADE)
+    program = models.ForeignKey(Program, on_delete=models.CASCADE)
+    joined_on = models.DateField(auto_now_add=True, blank=True)
+    completed_on = models.DateField(default=None, blank=True, null=True)

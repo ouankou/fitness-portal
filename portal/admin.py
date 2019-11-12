@@ -33,9 +33,14 @@ class ProgramAdmin(admin.ModelAdmin):
                     'created', 'is_active']
 
 
+class ClientSubscribedProgramAdmin(admin.ModelAdmin):
+    list_display = ['client', 'program', 'joined_on', 'completed_on']
+
+
 admin.site.register(Trainer, TrainerAdmin)
 admin.site.register(Client, ClientAdmin)
 admin.site.register(EmergencyContact, EmergencyContactAdmin)
 admin.site.register(TrainerRating, TrainerRatingAdmin)
 admin.site.register(Program, ProgramAdmin)
+admin.site.register(ClientSubscribedProgram, ClientSubscribedProgramAdmin)
 admin.site.site_header = "FITNESS PORTAL ADMIN"
