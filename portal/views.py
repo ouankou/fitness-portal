@@ -46,10 +46,12 @@ def trainer_application(request, **kwargs):
     if request.method == "POST":
         try:
             data = request.POST.dict()
+            # import remote_pdb; remote_pdb.set_trace(host='0.0.0.0', port=4444)
             user = User(username=data['username'], email=data['email'], password=data['password'])
             user.is_staff = True
             user.first_name = data['first_name']
             user.last_name = data['last_name']
+            user.set_password(data['password'])
             if user:
                 user.save()
 
@@ -67,7 +69,11 @@ def trainer_application(request, **kwargs):
         except Exception:
             return HttpResponseBadRequest()
 
-    return render(request, "signups/trainer.html")
+    context = {
+        "location_options": Trainer.LOCATION_CHOICES_MAP,
+        "certification_options": Trainer.CERTIFICATION_CHOICE_MAP
+    }
+    return render(request, "signups/trainer.html", context=context)
 
 
 def client_signup(request, **kwargs):
@@ -79,6 +85,7 @@ def client_signup(request, **kwargs):
         user.is_staff = False
         user.first_name = data['first_name']
         user.last_name = data['last_name']
+        user.set_password(data['password'])
         if user:
             user.save()
         client = Client.objects.create(

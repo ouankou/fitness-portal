@@ -123,4 +123,9 @@ body {
   text-underline: none;
 }
 
-.nav .flexnio
+.checkbox-group {
+    border: 1px solid lightgray;
+    border-radius: 5px;
+    padding-top: 3px;
+    margin: 0 3px;
+}

@@ -1,0 +1,81 @@
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Add Program</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form></form>
+                <form role="form" method="post" action="/program/{{ trainer.user.username }}/add/" id="program-form">
+                    {% csrf_token %}
+                    <input type="hidden" value="{{ trainer.id }}" id="trainer_id" name="trainer_id"/>
+                    <div class="container">
+                        <div class="row">
+                            <div class="col">
+                                <div class="form-group">
+                                    <label for="name">Name</label>
+                                    <input type="text" class="form-control" id="name" name="name"/>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <div class="form-group">
+                                    <label for="code">Code</label>
+                                    <input type="text" class="form-control" id="code" name="code"/>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <div class="form-group">
+                                    <label for="overview">Overview</label>
+                                    <textarea class="form-control" id="overview" name="overview"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <div class="form-group">
+                                    <label for="details">Detail Instruction</label>
+                                    <textarea class="form-control" id="details" name="details"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <div class="form-group">
+                                    <label for="material_1">Material 1</label>
+                                    <input id="material_1" class="form-control" name="material_1"/>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <div class="form-group">
+                                    <label for="material_2">Material 2</label>
+                                    <input id="material_2" class="form-control" name="material_2"/>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <div class="form-group">
+                                    <label for="material_3">Material 3</label>
+                                    <input id="material_3" class="form-control" name="material_3"/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal" id="close-program-add">Close</button>
+                        <button type="button" class="btn btn-primary" id="program-save">Save</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

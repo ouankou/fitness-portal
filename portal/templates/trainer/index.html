@@ -11,14 +11,9 @@
                 <div class="col-md-4">
                     <div class="profile-img">
                         <img src="{{ static }}/static/img/default-user-image.png"
-                             height="200" width="200"
+                             height="130" width="130"
                              alt=""/>
                     </div>
-                    <nav class="nav flex-column">
-                        <a class="nav-link active" href="#">Update Profile</a>
-                        <a class="nav-link" href="#">Add new service</a>
-                        <a class="nav-link" href="#">Client Reviews</a>
-                    </nav>
                 </div>
                 <div class="col-md-6">
                     <div class="profile-head">
@@ -26,7 +21,7 @@
                             {{ trainer.user.first_name }} {{ trainer.user.last_name }}
                         </h5>
                         <h6>
-                            Trainer Status
+                            {{ trainer.is_approved|yesno:"Active,Inactive"}}
                         </h6>
                         <ul class="nav nav-tabs" id="myTab" role="tablist">
                             <li class="nav-item">
@@ -44,12 +39,19 @@
                         </ul>
                     </div>
                 </div>
-                <div class="col-md-2">
+{#                <div class="col-md-2">#}
 {#                    <input type="submit" class="profile-edit-btn" name="btnAddMore" value="Edit Profile"/>#}
-                </div>
+{#                </div>#}
             </div>
             <div class="row">
                 <div class="col-md-4">
+                    <nav class="nav flex-column">
+                        <a class="nav-link active" href="#">Update Profile</a>
+                        <a class="nav-link" href="#" data-toggle="modal" data-target="#exampleModal">Add new Program</a>
+                        {% include "trainer/program_modal.html" %}
+                        <a class="nav-link" href="#">Client Reviews</a>
+                    </nav>
+
                 </div>
                 <div class="col-md-8">
                     <div class="tab-content profile-tab" id="myTabContent">
@@ -91,29 +93,14 @@
                                     <label>Certifications</label>
                                 </div>
                                 <div class="col-md-6">
-                                    <p>{{ trainer.certifications }}</p>
+                                    <p>{{ trainer.certification_str }}</p>
                                 </div>
                             </div>
                         </div>
                         <div class="tab-pane fade" id="programs" role="tabpanel" aria-labelledby="program-tab">
-{#                            <div class="row">#}
-{#                                <div class="col-md-6">#}
-{#                                    <label>Leg Size</label>#}
-{#                                </div>#}
-{#                                <div class="col-md-6">#}
-{#                                    <p>{{ client.leg_size }} inch</p>#}
-{#                                </div>#}
-{#                            </div>#}
+                            {% include "trainer/program_list.html" %}
                         </div>
                         <div class="tab-pane fade" id="clients" role="tabpanel" aria-labelledby="client-tab">
-{#                            <div class="row">#}
-{#                                <div class="col-md-6">#}
-{#                                    <label>Leg Size</label>#}
-{#                                </div>#}
-{#                                <div class="col-md-6">#}
-{#                                    <p>{{ client.leg_size }} inch</p>#}
-{#                                </div>#}
-{#                            </div>#}
                         </div>
                     </div>
                 </div>
@@ -121,3 +108,57 @@
         </form>
     </div>
 {% endblock %}
+<script>
+    {% block jsOnLoad %}
+        let hashRef = window.location.hash;
+        if (hashRef.length) {
+            hashRef = hashRef.substring(1);
+            if (hashRef)
+                $("#"+hashRef).click();
+        }
+        $(".nav-link").click(function (e) {
+            let labelledBy = $(this)[0].id;
+            window.location.hash = "#"+labelledBy;
+        });
+    {% endblock %}
+</script>
+<script>
+    {% block js %}
+        $("#program-save").click(function (e) {
+            e.preventDefault();
+            let data = {};
+            let $programForm = $("#program-form");
+            $programForm.serializeArray().forEach(function (item) {
+                data[item.name] = item.value;
+            });
+            let actionURL = $programForm.attr("action");
+            $.ajax({
+                url: window.location.origin + actionURL,
+                type: "post",
+                dataType: "json",
+                headers: {"X-CSRFToken": data["csrfmiddlewaretoken"]},
+                data: JSON.stringify({
+                    name: data.name,
+                    code: data.code,
+                    overview: data.overview,
+                    details: data.details,
+                    material_1: data.material_1,
+                    material_2: data.material_2,
+                    material_3: data.material_3
+                }),
+                success: function (data) {
+                    if (data.status === "success") {
+                        // TODO:: show success alert!
+                        hideModal();
+                        $programForm[0].reset();
+                        $("#program-tab").click();
+                    } else
+                        alert("Program save failed");
+                },
+                error: function (data) {
+                    console.log(data);
+                }
+            });
+        });
+    {% endblock %}
+</script>
