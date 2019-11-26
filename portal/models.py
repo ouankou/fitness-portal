@@ -123,6 +123,10 @@ class Program(models.Model):
     created = models.DateField(auto_now_add=True, blank=True)
     is_active = models.BooleanField(default=True, blank=True)
 
+    @property
+    def subscription_count(self):
+        return self.clientsubscribedprogram_set.count()
+
 
 class ClientSubscribedProgram(models.Model):
     client = models.ForeignKey(Client, on_delete=models.CASCADE)

@@ -37,8 +37,15 @@
                     </div>
                     <div class="col">
                         <div class="form-group">
-                            <label for="exampleInputPassword1">Password</label>
-                            <input type="password" class="form-control" id="exampleInputPassword1"
+                            <label for="password">Password</label>
+                            <input type="password" class="form-control" id="password"
+                                   placeholder="Password" name="password">
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="form-group">
+                            <label for="password-confirmation">Password Confirmation</label>
+                            <input type="password" class="form-control" id="password-confirmation"
                                    placeholder="Password" name="password">
                         </div>
                     </div>
@@ -123,9 +130,23 @@
             </div>
             <div class="row">
                 <div class="col">
-                    <button style="float: right" type="submit" class="btn btn-primary">Submit</button>
+                    <button style="float: right" type="submit" class="btn btn-primary" id="submit-client">Submit</button>
                 </div>
             </div>
         </form>
     </div>
 {% endblock %}
+
+<script>
+    {% block js %}
+        $("#submit-client").click(function (e) {
+            let password = $("#password").val();
+            let passwordConfirmation = $("#password-confirmation").val();
+            if (password !== passwordConfirmation) {
+                alert("Password didn't match");
+                return false;
+            }
+            return true;
+        });
+    {% endblock %}
+</script>

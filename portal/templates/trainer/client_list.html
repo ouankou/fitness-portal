@@ -1,0 +1,22 @@
+<table class="table">
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>Name</th>
+            <th>Purpose</th>
+            <th>Client Since</th>
+            <th>Program Completed</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for client_id, client in client_information.items %}
+            <tr>
+                <td>{{ forloop.counter }}</td>
+                <td>{{ client.name }}</td>
+                <td>{{ client.purpose }}</td>
+                <td>{{ client.client_since }}</td>
+                <td>{{ client.program_completed }}</td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>

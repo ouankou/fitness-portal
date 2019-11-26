@@ -4,7 +4,7 @@ from ast import literal_eval
 from django.views.decorators.csrf import csrf_exempt
 from django.http import JsonResponse, HttpResponseBadRequest
 
-from .models import Trainer, Program
+from .models import Trainer, Program, ClientSubscribedProgram, Client
 
 SUCCESS_STATUS = "success"
 ERROR_STATUS = "error"
@@ -74,19 +74,88 @@ def add_program(request, trainer_username, **kwargs):
     if request.method == "POST":
         data = json.loads(request.body)
         trainer = Trainer.objects.filter(user__username=trainer_username).first()
-        program = Program.objects.create(
-            trainer=trainer,
-            name=data['name'],
-            code=data['code'],
-            overview=data['overview'],
-            details=data['details'],
-            material_1=data['material_1'],
-            material_2=data['material_2'],
-            material_3=data['material_3']
-        )
-        if program:
-            program.save()
-            message = {"message": "Program added successfully!"}
-            return JsonResponse(prepare_response_data(SUCCESS_STATUS, message))
+        if trainer.is_approved:
+            program = Program.objects.create(
+                trainer=trainer,
+                name=data['name'],
+                code=data['code'],
+                overview=data['overview'],
+                details=data['details'],
+                material_1=data['material_1'],
+                material_2=data['material_2'],
+                material_3=data['material_3']
+            )
+            if program:
+                program.save()
+                message = {"message": "Program added successfully!"}
+                return JsonResponse(prepare_response_data(SUCCESS_STATUS, message))
 
     return HttpResponseBadRequest()
+
+
+def program_list(request, **kwargs):
+    programs = Program.objects.filter(is_active=True).all()
+    client_id = int(request.GET.get("client_id"))
+    client_subscribed_program_list = ClientSubscribedProgram.objects.filter(client_id=client_id).values_list('program_id')
+    data = {"data": [], "columns": []}
+    columns = ["", "Trainer", "Name", "Code", "Overview", "Subscription", "Join"]
+    counter = 1
+    for program in programs:
+        is_program_subscribed = (program.id,) in client_subscribed_program_list
+        button_class = "btn-primary" if is_program_subscribed else "btn-success"
+        button_label = "Joined" if is_program_subscribed else "Join"
+        prepared_row = [
+            counter,
+            program.trainer.full_name,
+            program.name,
+            program.code,
+            program.overview,
+            program.subscription_count,
+            "<button type='button' id='program-id-" + str(program.id) + "' "
+            "class='btn " + button_class + " join-program' "
+            "data-joined='" + str(is_program_subscribed) + "'"
+            "data-program_id='" + str(program.id) + "'>" + button_label + "</button>"
+        ]
+        data["data"].append(prepared_row)
+        counter += 1
+
+    data["columns"] = prepare_list_as_data_table_col_format(columns)
+    return JsonResponse(prepare_response_data(SUCCESS_STATUS, data))
+
+
+@csrf_exempt
+def client_joining_program(request, program_id, client_id, **kwargs):
+    if request.method == "POST":
+        client_subscribed_program = ClientSubscribedProgram.objects.create(
+            program_id=program_id,
+            client_id=client_id
+        )
+        if client_subscribed_program:
+            client_subscribed_program.save()
+            data = {"id": client_subscribed_program.id}
+            return JsonResponse(prepare_response_data(SUCCESS_STATUS, data))
+    return HttpResponseBadRequest()
+
+
+def get_client_subscribed_program_list(request, client_id, **kwargs):
+    client_subscribed_programs = ClientSubscribedProgram.objects.filter(client_id=client_id).all()
+
+    data = {"data": [], "columns": []}
+    columns = ["", "Name", "Code", "Trainer", "Overview", "Joined"]
+    counter = 1
+
+    for cs_program in client_subscribed_programs:
+
+        prepared_row = [
+            counter,
+            cs_program.program.name,
+            cs_program.program.code,
+            cs_program.program.trainer.full_name,
+            cs_program.program.overview,
+            cs_program.joined_on
+        ]
+        data["data"].append(prepared_row)
+        counter += 1
+
+    data["columns"] = prepare_list_as_data_table_col_format(columns)
+    return JsonResponse(prepare_response_data(SUCCESS_STATUS, data))

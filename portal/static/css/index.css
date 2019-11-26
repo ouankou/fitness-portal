@@ -129,3 +129,17 @@ body {
     padding-top: 3px;
     margin: 0 3px;
 }
+
+.modal-dialog {
+    max-width: 700px !important;
+}
+
+.modal-content {
+    width: 700px !important;
+}
+
+.join-program {
+    width: 74px;
+    height: 34px;
+    padding: 0;
+}

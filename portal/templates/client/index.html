@@ -7,6 +7,7 @@
 {% block container %}
     <div class="container emp-profile">
         <form method="post">
+            <input type="hidden" value="{{ client.id }}" id="client-id"/>
             <div class="row">
                 <div class="col-md-4">
                     <div class="profile-img">
@@ -38,6 +39,10 @@
                             <li class="nav-item">
                                 <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab"
                                    aria-controls="profile" aria-selected="false">Physic</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" id="program-tab" data-toggle="tab" href="#program" role="tab"
+                                   aria-controls="program" aria-selected="false">Programs</a>
                             </li>
                         </ul>
                     </div>
@@ -141,9 +146,51 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="tab-pane fade" id="program" role="tabpanel" aria-labelledby="program-tab">
+                            <table class="table" id="client-subscribed-program-list-table"></table>
+                        </div>
                     </div>
                 </div>
             </div>
         </form>
     </div>
 {% endblock %}
+
+<script>
+    {% block jsOnLoad %}
+        let clientId = $("#client-id").val();
+        $.get("/programs/?client_id=" + clientId, function (response) {
+            if (response.status === "success" && response.data) {
+
+                $("#program-list-table").DataTable({
+                    data: response.data.data,
+                    columns: response.data.columns
+                });
+
+                $(".join-program").click(function (e) {
+                    let isJoined = $(this).data("joined");
+                    if (isJoined !== "True") {
+                        let programId = $(this).data("program_id");
+                        $.post("/program/" + programId + "/" + clientId + "/", {}, function (data) {
+                            if (data.status === "success") {
+                                let buttonId = "program-id-" + programId;
+                                $("#" + buttonId).removeClass("btn-success")
+                                    .addClass("btn-primary")
+                                    .text("Joined");
+                            }
+                        });
+                    }
+                });
+            }
+        });
+
+        $.get("/programs/client_subscribed/"+clientId+"/", function (response) {
+            if (response.status === "success" && response.data) {
+                $("#client-subscribed-program-list-table").DataTable({
+                    data: response.data.data,
+                    columns: response.data.columns
+                });
+            }
+        });
+    {% endblock %}
+</script>

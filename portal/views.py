@@ -3,7 +3,7 @@ from django.http import HttpResponseBadRequest, JsonResponse
 from django.contrib.auth import logout as user_logout, authenticate, login as user_login
 from django.shortcuts import render, redirect
 from django.contrib.auth.models import User
-from .models import Trainer, Client
+from .models import Trainer, Client, Program, ClientSubscribedProgram
 
 
 def index(request, **kwargs):
@@ -27,8 +27,9 @@ def render_admin_index(request, **kwargs):
 def render_client_index(request, username=None, **kwargs):
     username = username if username else request.user.username
     client = Client.objects.filter(user__username=username).first()
+    programs = Program.objects.filter(is_active=True).all()
     if client is not None:
-        context = {"client": client}
+        context = {"client": client, "programs": programs}
         return render(request, "client/index.html", context)
     return HttpResponseBadRequest()
 
@@ -37,7 +38,23 @@ def render_trainer_index(request, username=None, **kwargs):
     username = username if username else request.user.username
     trainer = Trainer.objects.filter(user__username=username).first()
     if trainer is not None:
-        context = {"trainer": trainer}
+        client_program_list = ClientSubscribedProgram.objects.filter(program__trainer_id=trainer.id).all()
+        client_information = {}
+        for client_program in client_program_list:
+            if not client_information.get(client_program.client_id):
+                client_information[client_program.client_id] = {
+                    "name": client_program.client.user.get_full_name(),
+                    "purpose": client_program.client.purpose_text,
+                    "client_since": client_program.joined_on,
+                    "program_completed": 1 if client_program.completed_on is not None else 0
+                }
+            elif client_information.get(client_program.client_id):
+                if client_information[client_program.client_id]["client_since"] > client_program.joined_on:
+                    client_information[client_program.client_id]["client_since"] = client_program.joined_on
+                if client_program.completed_on is not None:
+                    client_information[client_program.client_id]["program_completed"] += 1
+
+        context = {"trainer": trainer, "client_information": client_information}
         return render(request, "trainer/index.html", context)
     return HttpResponseBadRequest()
 
