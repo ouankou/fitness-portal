@@ -6,6 +6,7 @@ RUN apt install -y \
     python3-pip \
     mysql-server \
     python-dev \
+    libssl-dev \
     libmysqlclient-dev
 
 RUN curl -sL https://deb.nodesource.com/setup_10.x | bash -
