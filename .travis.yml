@@ -12,10 +12,11 @@ before_install:
     - sudo apt-get -y install docker-compose
 
 before_script:
+    - cd docker
     - sudo docker-compose build
     - sudo docker-compose run app python3 fitness-portal/manage.py makemigrations portal
     - sudo docker-compose run app python3 fitness-portal/manage.py migrate
 
 script:
-    - sudo docker-compose run app python3 fitness-portal/manage.py test tests
+    - cd docker && sudo docker-compose run app python3 fitness-portal/manage.py test tests
 
