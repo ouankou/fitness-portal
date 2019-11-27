@@ -15,5 +15,5 @@ before_script:
     - mysql -e 'create database test;' -u root
 
 script:
-    - python3 fitness-portal/manage.py test tests
+    - python3 manage.py test tests
 
