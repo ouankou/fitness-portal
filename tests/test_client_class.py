@@ -30,12 +30,18 @@ class TestClient(TestCase):
             leg_size = 50,
             health_issues = 'None'
         )
-        client.save()
-        savedClient = Client.objects.filter(user__username = 'jax').first()
-        self.assertEquals(client, savedClient)
-        print("verify some information")
-        self.assertEquals(savedClient.user.is_staff, False)
-        print("PASS: a client entry is created in the database")
+        self.assertEquals(client.user, user)
+        self.assertEquals(client.purpose, 'rec')
+        self.assertEquals(client.starting_weight, 150)
+        self.assertEquals(client.current_weight, 200)
+        self.assertEquals(client.target_weight, 160)
+        self.assertEquals(client.blood_group, 'A')
+        self.assertEquals(client.height_in_feet, 100)
+        self.assertEquals(client.arm_size, 40)
+        self.assertEquals(client.chest_size, 80)
+        self.assertEquals(client.leg_size, 50)
+        self.assertEquals(client.health_issues, 'None')
+        print("PASS: an instance of Client class is created.")
 
 
 

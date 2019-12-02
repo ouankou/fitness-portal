@@ -24,12 +24,12 @@ class TestTrainer(TestCase):
             locations_served = 'union',
             certification = 'ace'
         )
-        trainer.save()
-        savedTrainer = Trainer.objects.filter(user__username = 'jax').first()
-        self.assertEquals(trainer, savedTrainer)
-        print("verify some information")
-        self.assertEquals(savedTrainer.is_approved, False)
-        print("PASS: a trainer entry is created in the database")
+        self.assertEquals(trainer.user, user)
+        self.assertEquals(trainer.years_of_previous_experience, 4)
+        self.assertEquals(trainer.charge, 200)
+        self.assertEquals(trainer.locations_served, 'union')
+        self.assertEquals(trainer.certification, 'ace')
+        print("PASS: an instance of Trainer class is created.")
 
 
 
