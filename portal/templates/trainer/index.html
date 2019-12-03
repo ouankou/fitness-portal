@@ -28,10 +28,12 @@
                                 <a class="nav-link active" id="about-tab" data-toggle="tab" href="#about" role="tab"
                                    aria-controls="about" aria-selected="true">About</a>
                             </li>
+                            {% if trainer.is_approved %}
                             <li class="nav-item">
                                 <a class="nav-link" id="program-tab" data-toggle="tab" href="#programs" role="tab"
                                    aria-controls="programs" aria-selected="false">Programs</a>
                             </li>
+                            {% endif %}
                             <li class="nav-item">
                                 <a class="nav-link" id="client-tab" data-toggle="tab" href="#clients" role="tab"
                                    aria-controls="clients" aria-selected="false">Clients</a>
@@ -47,9 +49,11 @@
                 <div class="col-md-4">
                     <nav class="nav flex-column">
                         <a class="nav-link active" href="#">Update Profile</a>
-                        <a class="nav-link" href="#" data-toggle="modal" data-target="#exampleModal">Add new Program</a>
-                        {% include "trainer/program_modal.html" %}
-                        <a class="nav-link" href="#">Client Reviews</a>
+                        {% if trainer.is_approved %}
+                            <a class="nav-link" href="#" data-toggle="modal" data-target="#exampleModal">Add new Program</a>
+                            {% include "trainer/program_modal.html" %}
+                            <a class="nav-link" href="#">Client Reviews</a>
+                        {% endif %}
                     </nav>
                 </div>
                 <div class="col-md-8">
