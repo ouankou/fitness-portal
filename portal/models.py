@@ -95,6 +95,10 @@ class Client(models.Model):
     def __str__(self):
         return self.user.first_name + " " + self.user.last_name
 
+    @classmethod
+    def generic(cls, param, param1, x):
+        pass
+
 
 class EmergencyContact(models.Model):
     name = models.CharField(max_length=255)

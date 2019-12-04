@@ -94,6 +94,7 @@ def trainer_application(request, **kwargs):
 
 
 def client_signup(request, **kwargs):
+
     if request.method == "POST":
         # try:
         data = request.POST.dict()
