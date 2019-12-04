@@ -123,23 +123,30 @@ def program_list(request, **kwargs):
     return JsonResponse(prepare_response_data(SUCCESS_STATUS, data))
 
 
+def join_client_in_program_(program_id, client_id):
+    data = None
+    client_subscribed_program = ClientSubscribedProgram.objects.create(
+        program_id=program_id,
+        client_id=client_id
+    )
+    if client_subscribed_program:
+        client_subscribed_program.save()
+        data = {"id": client_subscribed_program.id}
+
+    return data
+
+
 @csrf_exempt
 def client_joining_program(request, program_id, client_id, **kwargs):
     if request.method == "POST":
-        client_subscribed_program = ClientSubscribedProgram.objects.create(
-            program_id=program_id,
-            client_id=client_id
-        )
-        if client_subscribed_program:
-            client_subscribed_program.save()
-            data = {"id": client_subscribed_program.id}
+        data = join_client_in_program_(program_id, client_id)
+        if data:
             return JsonResponse(prepare_response_data(SUCCESS_STATUS, data))
     return HttpResponseBadRequest()
 
 
-def get_client_subscribed_program_list(request, client_id, **kwargs):
+def get_client_subscribed_program_list_(client_id):
     client_subscribed_programs = ClientSubscribedProgram.objects.filter(client_id=client_id).all()
-
     data = {"data": [], "columns": []}
     columns = ["", "Name", "Code", "Trainer", "Overview", "Joined"]
     counter = 1
@@ -158,4 +165,10 @@ def get_client_subscribed_program_list(request, client_id, **kwargs):
         counter += 1
 
     data["columns"] = prepare_list_as_data_table_col_format(columns)
+    #import pdb;pdb.set_trace()
+    return data
+
+
+def get_client_subscribed_program_list(request, client_id, **kwargs):
+    data = get_client_subscribed_program_list_(client_id)
     return JsonResponse(prepare_response_data(SUCCESS_STATUS, data))
